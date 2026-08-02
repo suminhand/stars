@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>신도 후기 | 별을 부르는 자</title><link rel="stylesheet" href="style.css"></head>
+<body><header class="site-header"><div class="header-inner"><a class="brand" href="index.html">별을 부르는 자</a>      <nav aria-label="주요 메뉴">
+        <a href="index.html">홈페이지</a>
+        <a href="activities.html">하는 일</a>
+        <a href="locations.html">활동 지역</a>
+        <a class="active" href="reviews.html">신도 후기</a>
+      </nav></div></header>
+<section class="page-head"><div class="page-head-inner"><p class="page-kicker">BELIEVERS' RECORDS</p><h1>신도 후기</h1><p>별과 구제를 통해 겪은 변화와 기억을 기록하는 공간입니다.</p></div></section>
+<main>
+  <div class="board-toolbar">
+    <div><strong id="result-count">전체 글 5개</strong><span id="result-note">공식 홈페이지에 공개된 후기만 표시됩니다.</span></div>
+    <form class="board-search" id="review-search" role="search">
+      <label class="sr-only" for="search-input">후기 검색</label>
+      <input id="search-input" type="search" placeholder="후기 검색" autocomplete="off">
+      <button type="submit" aria-label="검색">⌕</button>
+    </form>
+  </div>
+  <section class="board" aria-label="신도 후기 게시판">
+    <div class="board-head"><span>분류</span><span>제목</span><span>작성자</span><span>작성일</span></div>
+        <a class="board-row" href="review-01.html" data-search="시설에서 보낸 첫 번째 밤 숙박 지원 별빛아래">
+          <span class="board-category">숙박 지원</span>
+          <span class="board-title">시설에서 보낸 첫 번째 밤</span>
+          <span class="board-author">별빛아래</span>
+          <span class="board-date">2026-07-18</span>
+        </a>
+        <a class="board-row" href="review-02.html" data-search="봉사를 하며 알게 된 나의 소원 자선 활동 Aster_A">
+          <span class="board-category">자선 활동</span>
+          <span class="board-title">봉사를 하며 알게 된 나의 소원</span>
+          <span class="board-author">Aster_A</span>
+          <span class="board-date">2026-06-29</span>
+        </a>
+        <a class="board-row" href="review-03.html" data-search="코마치 님의 메시지가 도착한 날 교단 서신 Lumiere">
+          <span class="board-category">교단 서신</span>
+          <span class="board-title">코마치 님의 메시지가 도착한 날</span>
+          <span class="board-author">Lumiere</span>
+          <span class="board-date">2026-05-12</span>
+        </a>
+        <a class="board-row" href="review-04.html" data-search="관측회에서 본 유난히 밝은 별 별 관측 K-17">
+          <span class="board-category">별 관측</span>
+          <span class="board-title">관측회에서 본 유난히 밝은 별</span>
+          <span class="board-author">K-17</span>
+          <span class="board-date">2026-04-03</span>
+        </a>
+        <a class="board-row" href="review-05.html" data-search="장기 체류 프로그램을 마치며 숙박 생활 지원 Mori_88">
+          <span class="board-category">숙박·생활 지원</span>
+          <span class="board-title">장기 체류 프로그램을 마치며</span>
+          <span class="board-author">Mori_88</span>
+          <span class="board-date">2026-02-21</span>
+        </a>
+        <a class="board-row secret-review" href="review-observation.html" data-secret-key="관찰력 성공" hidden>
+          <span class="board-category">관측 기록</span>
+          <span class="board-title">...</span>
+          <span class="board-author">observer_03</span>
+          <span class="board-date">2025-11-19</span>
+        </a>
+  </section>
+  <p class="board-empty" id="board-empty" hidden>검색 결과가 없습니다.</p>
+  <div class="pagination" id="pagination"><span class="current">1</span></div>
+</main>
+<script>
+  const form = document.getElementById('review-search');
+  const input = document.getElementById('search-input');
+  const normalRows = [...document.querySelectorAll('.board-row:not(.secret-review)')];
+  const secretRow = document.querySelector('.secret-review');
+  const count = document.getElementById('result-count');
+  const note = document.getElementById('result-note');
+  const empty = document.getElementById('board-empty');
+  const pagination = document.getElementById('pagination');
+
+  function runSearch() {
+    const query = input.value.trim();
+    const normalized = query.toLocaleLowerCase('ko-KR');
+
+    if (query === '관찰력 성공') {
+      normalRows.forEach(row => row.hidden = true);
+      secretRow.hidden = false;
+      count.textContent = '검색 결과 1개';
+      note.textContent = '입력한 검색어와 일치하는 기록입니다.';
+      empty.hidden = true;
+      pagination.hidden = true;
+      return;
+    }
+
+    secretRow.hidden = true;
+    let visible = 0;
+    normalRows.forEach(row => {
+      const match = !normalized || row.dataset.search.toLocaleLowerCase('ko-KR').includes(normalized);
+      row.hidden = !match;
+      if (match) visible++;
+    });
+
+    count.textContent = normalized ? `검색 결과 ${visible}개` : '전체 글 5개';
+    note.textContent = normalized ? '공개된 후기에서 검색한 결과입니다.' : '공식 홈페이지에 공개된 후기만 표시됩니다.';
+    empty.hidden = visible !== 0;
+    pagination.hidden = normalized !== '';
+  }
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    runSearch();
+  });
+  input.addEventListener('search', runSearch);
+</script>
+  <footer>
+    <div class="footer-inner">
+      <span>© The Callers of the Stars</span>
+      <span><a href="activities.html">활동 안내로 돌아가기</a></span>
+    </div>
+  </footer></body></html>
